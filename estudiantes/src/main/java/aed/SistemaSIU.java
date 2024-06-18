@@ -1,5 +1,7 @@
 package aed;
 
+import java.util.ArrayList;
+
 public class SistemaSIU {
     private  DicTrie _diccionarioCarreras;
     private  DicTrie _diccionarioestudiantes;
@@ -87,11 +89,22 @@ public class SistemaSIU {
     }
 
     public String[] carreras(){
-        throw new UnsupportedOperationException("Método no implementado aún");	    
+        ArrayList<String> listado = _diccionarioCarreras.imprimir();
+        String[] res = new String[listado.size()];
+        for (int i = 0; i < listado.size(); i++) {
+            res[i] = listado.get(i);
+        }
+        return res;
     }
 
     public String[] materias(String carrera){
-        throw new UnsupportedOperationException("Método no implementado aún");	    
+        DicTrie carreraImprimir = (DicTrie) _diccionarioCarreras.obtener(carrera);
+        ArrayList<String> listado = carreraImprimir.imprimir();
+        String[] res = new String[listado.size()];
+        for (int i = 0; i < listado.size(); i++) {
+            res[i] = listado.get(i);
+        }
+        return res;
     }
 
     public int materiasInscriptas(String estudiante){

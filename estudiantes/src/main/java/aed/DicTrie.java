@@ -87,7 +87,7 @@ public class DicTrie<T extends String,H> {
                     return false;
                 }
             }
-            return true;
+            return _actual.significado!=null;
         }
 
         public void borrar(T clave) {
@@ -104,6 +104,7 @@ public class DicTrie<T extends String,H> {
                 _actual = _actual._siguientes.get(charAscci);
             }
             _actual.significado = null;
+            this._tamaño--;
             if (_actual.esNodoInutil()) {
                 ultimoNodoUtil._siguientes.set(ultimaClaveAborrar, null);
                 ultimoNodoUtil.cantidadDeHijos--;
@@ -111,14 +112,74 @@ public class DicTrie<T extends String,H> {
 
         }
     }
+    public ArrayList<String> imprimir(){
+        DicTrie_Iterador iterador = new DicTrie_Iterador();
+        ArrayList<String> e =iterador.armarClaves();
+        return e;
 
-
+    }
+// probablemente se termine armando por recursion o anotando las claves en una variable interna
     private class DicTrie_Iterador   {
-        private Nodo _actual;
+        private Nodo _ultimoNodoConMasDeUnHijo;
         private ArrayList<String> claves;
+        private int ultimoAscciCode;
+
         public  DicTrie_Iterador(){
-            _actual = _raiz;
+            _ultimoNodoConMasDeUnHijo = _raiz;
+            this.claves=new ArrayList<>();
+            ;
         }
+        public ArrayList<String> armarClaves(){
+            recorrerRursivo(_raiz,"",0);
+            return claves;
+        }
+        /*public void recorrer(Nodo nodo,StringBuilder prefijo ,int valor ){
+            Nodo actual = nodo;
+            for (int i = valor; i <nodo._siguientes.size() ; i++) {
+                if (actual.cantidadDeHijos>1){
+                    _ultimoNodoConMasDeUnHijo=actual;
+                    ultimoAscciCode=i;
+                } if (actual.significado!=null) {
+                    claves.add(prefijo.toString());
+
+                }if (actual._siguientes.get(i)!=null){
+                    prefijo.append(i);
+                    actual = actual._siguientes.get(i);
+                    i = 0;
+                }else {
+                    claves.add(prefijo.toString());
+                }
+            }
+            }
+
+        public void siguiente(){
+            StringBuilder pre = new StringBuilder(claves.get(claves.size()-1));
+            recorrer(_ultimoNodoConMasDeUnHijo,pre,ultimoAscciCode);
+
+        }*/
+
+        public void recorrerRursivo(Nodo nodo,String pre ,int valor ){
+            Nodo actual = nodo;
+            StringBuilder prefijo = new StringBuilder();
+            prefijo.append(pre);
+            // cosas muy cabeza que arme por estar en el laburo
+            if(nodo.caracter!=null){
+                prefijo.append(nodo.caracter);
+            }
+            if (actual.significado!=null) {
+                claves.add(prefijo.toString());
+            }
+            for (int i = valor; i <nodo._siguientes.size() ; i++) {
+                if (actual._siguientes.get(i)!=null){
+                    recorrerRursivo(actual._siguientes.get(i),prefijo.toString(),0);
+                    }
+                else{
+
+                    }
+        }
+    }
+
+
 
 
 

@@ -28,8 +28,12 @@ public class Materia {
         return _estudiantes;
     }
     public void agregarEstudiante(String estudiante) {
+        if (_estudiantes.contains(estudiante)){
 
-        this._estudiantes.add(estudiante);
+        }else {
+            _estudiantes.add(estudiante);
+        }
+
     }
 
     public int[] get_docentes() {
@@ -51,7 +55,11 @@ public class Materia {
     }
 
     public boolean excedeCupo(){
-        int cupo=_docentes[0]*250+_docentes[1]*100+_docentes[2]*20+_docentes[3]*30;
-        return cupo>_estudiantes.size();
+        int cantEstudiantes = _estudiantes.size();
+        boolean excedeProfesor = _docentes[0]*250<cantEstudiantes;
+        boolean excedeJTP = _docentes[1]*100<cantEstudiantes;
+        boolean excedeAY1 = _docentes[2]*20<cantEstudiantes;
+        boolean excedeAY2 = _docentes[3]*30<cantEstudiantes;
+        return excedeProfesor||excedeJTP||excedeAY1||excedeAY2;
     }
 }

@@ -312,4 +312,34 @@ public class SistemaSIUTests {
         String[] carreras = new String[] {"Ciencias Biológicas", "Ciencias Físicas", "Ciencias Matemáticas", "Ciencias Químicas", "Ciencias de Datos", "Ciencias de la Computación"};
         assertArrayEquals(carreras, sistema.carreras());
     }
+
+    @Test
+    void test_dir(){
+        DicTrie coso = new DicTrie();
+        coso.agregar("casa",3);
+        coso.agregar("casami",4);
+        coso.agregar("pepito",6);
+        coso.agregar("casamimgo",8);
+        coso.agregar("casaming",7);
+        assertEquals(coso.obtener("pepito"), 6);
+        assertEquals(coso.obtener("casa"), 3);
+        assertEquals(coso.obtener("casami"), 4);
+        assertEquals(coso.obtener("casaming"), 7);
+        assertEquals(coso.obtener("casamimgo"), 8);
+        coso.agregar("casami",9);
+        assertEquals(coso.obtener("casami"), 9);
+        assertTrue(coso.esta("casa"));
+        assertTrue(coso.esta("casami"));
+        assertTrue(coso.esta("pepito"));
+        coso.borrar("casa");
+        assertFalse(coso.esta("casa"));
+        coso.borrar("pepito");
+        assertFalse(coso.esta("pepito"));
+        coso.borrar("casaming");
+        assertFalse(coso.esta("casaming"));
+        coso.borrar("casamimgo");
+        assertFalse(coso.esta("casamingo"));
+        assertEquals(coso._tamaño,1);
+    }
 }
+
