@@ -18,6 +18,7 @@ public class DicTrie<T extends String,H> {
             significado = v;
             cantidadDeHijos = 0;
             caracter = c;
+            // esto se podria cambiar por un Array comun inicializado en 255 posiciones
             _siguientes= new ArrayList<Nodo>();
             for (int i = 0; i < 256; i++) {
                 _siguientes.add(null);
@@ -41,13 +42,16 @@ public class DicTrie<T extends String,H> {
             _tamaño = 0;
 
         }
-
+        //basicamente es o entrar a la pos del array que es igual al char en ascii o crearlo, eso es O(longitud de la clave)
+        //tambien chekea si es que esta y entra, se puede optimizar creo ... (probablemente chekiando al final si el elemento esta o no )
+        //Optimizacion :lo que hay que hacer basicamente es no preguntar si esta y al final antes de cambiar el signficado ver si esta o no en null
+        // si esta lo cambias , si no lo setias y sumas al tamaño
         public void agregar(T claveNueva, H elem) {
             Nodo _actual = _raiz;
             if (this.esta(claveNueva)){
                 for (int i = 0; i <claveNueva.length() ; i++) {
-                    int charAscci = (int) claveNueva.charAt(i);
-                    _actual =_actual._siguientes.get(charAscci);
+                    int charAscii = (int) claveNueva.charAt(i);
+                    _actual =_actual._siguientes.get(charAscii);
                 }
                 _actual.significado = elem;
             }else{
@@ -66,7 +70,7 @@ public class DicTrie<T extends String,H> {
             _tamaño++;
             }
         }
-
+        // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
         public H obtener(T clave) {
             Nodo _actual = _raiz;
             for (int i = 0; i < clave.length(); i++) {
@@ -76,7 +80,7 @@ public class DicTrie<T extends String,H> {
             }
             return _actual.significado;
         }
-
+    // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
         public boolean esta(T clave) {
             Nodo _actual = _raiz;
             for (int i = 0; i < clave.length(); i++) {
@@ -89,6 +93,9 @@ public class DicTrie<T extends String,H> {
             }
             return _actual.significado!=null;
         }
+        // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
+        // lo complicado de este metodo es sacar  el  ultimoNodoutil que o bien es la raiz o es alguno que tenga mas de dos hijos
+        // tambien puede pasar que la clave a borrar se prefijo de otra en ese caso solo se borra el significado y queda todo igual
 
         public void borrar(T clave) {
             if (this.esta(clave)){
@@ -118,7 +125,8 @@ public class DicTrie<T extends String,H> {
         return e;
 
     }
-// probablemente se termine armando por recursion o anotando las claves en una variable interna
+    // probablemente se termine armando por recursion o anotando las claves en una variable interna
+    // lo termine armando por recursion
     private class DicTrie_Iterador   {
         private Nodo _ultimoNodoConMasDeUnHijo;
         private ArrayList<String> claves;
@@ -133,6 +141,11 @@ public class DicTrie<T extends String,H> {
             recorrerRursivo(_raiz,"",0);
             return claves;
         }
+
+        //para hacerlo iterativo lo que habria que hacer es tener mucho cuidado y guardar ,el nodo, el prefijo y el i al momento de encontrar un clave
+        //no es muy dificil pero termina haciendo lo mismo que la recursion
+        // si no la otra es al momento de agregar la clave guardarla en un array pero eso ya creo que es n por ser la longitud del arreglo
+
         /*public void recorrer(Nodo nodo,StringBuilder prefijo ,int valor ){
             Nodo actual = nodo;
             for (int i = valor; i <nodo._siguientes.size() ; i++) {
@@ -158,6 +171,8 @@ public class DicTrie<T extends String,H> {
 
         }*/
 
+        //basicamente es lo mismo que antes nada mas que por cada nodo recorre las 255 pos en vez de donde solo esta el dato,si bien parece aumentar mucho la complejidad
+        // al estar fijo el numero en el for pasa a ser constante y a depender de la longitud de las claves
         public void recorrerRursivo(Nodo nodo,String pre ,int valor ){
             Nodo actual = nodo;
             StringBuilder prefijo = new StringBuilder();

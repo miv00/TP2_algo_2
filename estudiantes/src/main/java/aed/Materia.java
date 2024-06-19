@@ -1,7 +1,7 @@
 package aed;
 
 import java.util.ArrayList;
-
+//estructura para guardar las cosas de las materia, no tiene nada muy raro a explicar
 public class Materia {
 
     private ArrayList<String> _estudiantes;

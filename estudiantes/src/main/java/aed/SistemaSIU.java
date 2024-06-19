@@ -1,7 +1,7 @@
 package aed;
 
 import java.util.ArrayList;
-
+// hay que mirar el tema de casteos par que quede mas prolijo el codigo,lo demas es solo llamar a las funciones del trie bien
 public class SistemaSIU {
     private  DicTrie _diccionarioCarreras;
     private  DicTrie _diccionarioestudiantes;
