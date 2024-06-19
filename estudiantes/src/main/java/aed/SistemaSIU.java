@@ -13,15 +13,18 @@ public class SistemaSIU {
     PROF
   }
 
+
+  // TODO: Difieren las complejidades - Revisar estructura.
+  // a priori la compleidad esta mal, da como resultado \sum_{c \in C}\sum_{m \in M_c}{|c| + |m|} + E
   public SistemaSIU(InfoMateria[] infoMaterias, String[] libretasUniversitarias) {
     _diccionarioCarreras = new DicTrie<String, DicTrie<String, Materia>>();
     _diccionarioestudiantes = new DicTrie<String, Integer>();
 
     for (int i = 0; i < infoMaterias.length; i++) {
+
       ParCarreraMateria[] par = infoMaterias[i].getParesCarreraMateria();
       Materia materia = new Materia(par);
 
-      // conjunto de materias por carrera
       for (int j = 0; j < par.length; j++) {
 
         // checkiar aliansing por que si estan adentro de la misma pos del array son la
@@ -39,69 +42,108 @@ public class SistemaSIU {
         }
       }
     }
+
+    // Complejidad: O(E) * 1
     for (int i = 0; i < libretasUniversitarias.length; i++) {
-      _diccionarioestudiantes.agregar(libretasUniversitarias[i], 0);
+      _diccionarioestudiantes.agregar(libretasUniversitarias[i], 0); // O(1)
     }
+
+    // 
   }
 
+  // TODO: Difieren las complejidades - Revisar estructura.
   public void inscribir(String estudiante, String carrera, String materia) {
+    // O(|c|)
     DicTrie<String, Materia> dicCarreas = _diccionarioCarreras.obtener(carrera);
+    // O(|c| + |m|)
     Materia mat = dicCarreas.obtener(materia);
 
+    // Cuidado con la complejidad aca, porque contains es buscar y esto se paga en
+    // O(claves de estudiantes)
     mat.agregarEstudiante(estudiante);
 
+    // O(1) porque estudiante esta acotado
     int cant = _diccionarioestudiantes.obtener(estudiante);
+    // O(1) porque estudiante esta acotado
     _diccionarioestudiantes.agregar(estudiante, cant + 1);
+
   }
 
+  // Complejidad: O(|c| + |m| + 1) = O(|c| + |m|)
   public void agregarDocente(CargoDocente cargo, String carrera, String materia) {
+    // O(|c|)
     DicTrie<String, Materia> dicCarreas = _diccionarioCarreras.obtener(carrera);
+    // O(|m|)
     Materia mat = dicCarreas.obtener(materia);
 
+    // O(1)
     mat.agregar(cargo);
   }
 
+  // Complejidad: O(|c| + |m| + 1) = O(|c| + |m|)
   public int[] plantelDocente(String materia, String carrera) {
+    // O(|c|)
     DicTrie<String, Materia> dicCarreas = _diccionarioCarreras.obtener(carrera);
+    // O(|m|)
     Materia mat = dicCarreas.obtener(materia);
 
+    // O(1)
     return mat.get_docentes();
   }
 
+  // TODO: Difieren las complejidades - Revisar estructura.
   public void cerrarMateria(String materia, String carrera) {
+    // O(|c|)
     DicTrie<String, Materia> dicMaterias = _diccionarioCarreras.obtener(carrera);
+    // O(|m|)
     Materia mat = dicMaterias.obtener(materia);
 
+    // O(1)
     ParCarreraMateria[] listaMateriasBorrar = mat.get_alias();
 
+    // O(Em)
     for (int i = 0; i < mat.lista_estudiantes().size(); i++) {
-      String estudiante = (String) mat.lista_estudiantes().get(i);
+      // O(1)
+      String estudiante = mat.lista_estudiantes().get(i);
+      // O(1)
       int cant = _diccionarioestudiantes.obtener(estudiante);
 
+      // O(1)
       _diccionarioestudiantes.agregar(estudiante, cant - 1);
     }
+
+    // cuidado con listDeMaterias porque esto es O(|c|)
     for (int i = 0; i < listaMateriasBorrar.length; i++) {
       String carreraDeDondeBorrar = listaMateriasBorrar[i].carrera;
       DicTrie<String, Materia> listaDeMaterias = _diccionarioCarreras.obtener(carreraDeDondeBorrar);
-
       listaDeMaterias.borrar(listaMateriasBorrar[i].nombreMateria);
     }
+    // la complejidad final de este loop es \sum_{n \in n_m}{|c| + |n|}, lo cual es erroneo
   }
 
+  // Complejidad: O(|c| + |m| + 1) = O(|c| + |m|)
   public int inscriptos(String materia, String carrera) {
+    // O(|c|)
     DicTrie<String, Materia> dicCarreas = _diccionarioCarreras.obtener(carrera);
-    Materia mat = (Materia) dicCarreas.obtener(materia);
+    // O(|m|)
+    Materia mat = dicCarreas.obtener(materia);
 
+    // O(1)
     return mat.get_estudiantes();
   }
 
+  // Complejidad: O(|c| + |m| + 1) = O(|c| + |m|)
   public boolean excedeCupo(String materia, String carrera) {
+    // O(|c|)
     DicTrie<String, Materia> dicCarreas = _diccionarioCarreras.obtener(carrera);
+    // O(|m|)
     Materia mat = dicCarreas.obtener(materia);
 
+    // O(1)
     return mat.excedeCupo();
   }
 
+  // TODO: imprimir usa recursion, repensar.
   public String[] carreras() {
     ArrayList<String> listado = _diccionarioCarreras.imprimir();
     String[] res = new String[listado.size()];
@@ -111,6 +153,7 @@ public class SistemaSIU {
     return res;
   }
 
+  // TODO: imprimir usa recursion, repensar.
   public String[] materias(String carrera) {
     DicTrie<String, Materia> carreraImprimir = _diccionarioCarreras.obtener(carrera);
     ArrayList<String> listado = carreraImprimir.imprimir();
@@ -124,7 +167,11 @@ public class SistemaSIU {
     return res;
   }
 
+  // los estudiantes estan acotados, porque el numero de libreta es finito, y la
+  // mayoria de los alumnos comparten prefijo
+  // Complejidad: O(1)
   public int materiasInscriptas(String estudiante) {
+    // O(1)
     return _diccionarioestudiantes.obtener(estudiante);
   }
 }

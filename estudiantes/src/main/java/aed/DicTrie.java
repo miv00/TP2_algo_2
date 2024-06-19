@@ -121,7 +121,7 @@ public class DicTrie<T extends String,H> {
     }
     public ArrayList<String> imprimir(){
         DicTrie_Iterador iterador = new DicTrie_Iterador();
-        ArrayList<String> e =iterador.armarClaves();
+        ArrayList<String> e = iterador.armarClaves();
         return e;
 
     }
