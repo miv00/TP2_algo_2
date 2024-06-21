@@ -23,24 +23,27 @@ public class SistemaSIU {
     for (int i = 0; i < infoMaterias.length; i++) {
 
       ParCarreraMateria[] par = infoMaterias[i].getParesCarreraMateria();
-      Materia materia = new Materia(par);
-
+      ParPunteroAlias[] parPunteroArray = new ParPunteroAlias[par.length];
+      Materia materia = new Materia();
+      materia.setParPunteroArray(parPunteroArray);
       for (int j = 0; j < par.length; j++) {
-
         // checkiar aliansing por que si estan adentro de la misma pos del array son la
         // misma materia
+
         String carrera = par[j].getCarrera();
         String nombreMateria = par[j].getNombreMateria();
-
-        if (_diccionarioCarreras.esta(carrera)) {
-          DicTrie<String, Materia> dicCarreas = _diccionarioCarreras.obtener(carrera);
-          dicCarreas.agregar(nombreMateria, materia);
-        } else {
+        DicTrie<String, Materia> dicCarreas;
+        //si no esta crearla
+        if (!_diccionarioCarreras.esta(carrera)) {
           _diccionarioCarreras.agregar(carrera, new DicTrie<>());
-          DicTrie<String, Materia> dicCarreas = _diccionarioCarreras.obtener(carrera);
-          dicCarreas.agregar(nombreMateria, materia);
         }
+
+        dicCarreas = _diccionarioCarreras.obtener(carrera);
+        ParPunteroAlias alias = new ParPunteroAlias(dicCarreas,nombreMateria);
+        parPunteroArray[j]= alias;
+        dicCarreas.agregar(nombreMateria, materia);
       }
+
     }
 
     // Complejidad: O(E) * 1
@@ -99,25 +102,32 @@ public class SistemaSIU {
     Materia mat = dicMaterias.obtener(materia);
 
     // O(1)
-    ParCarreraMateria[] listaMateriasBorrar = mat.get_alias();
-
+    ParPunteroAlias[] listaMateriasBorrar2 = mat.getParPunteroArray();
     // O(Em)
     for (int i = 0; i < mat.lista_estudiantes().size(); i++) {
       // O(1)
       String estudiante = mat.lista_estudiantes().get(i);
       // O(1)
       int cant = _diccionarioestudiantes.obtener(estudiante);
-
       // O(1)
       _diccionarioestudiantes.agregar(estudiante, cant - 1);
     }
 
-    // cuidado con listDeMaterias porque esto es O(|c|)
-    for (int i = 0; i < listaMateriasBorrar.length; i++) {
-      String carreraDeDondeBorrar = listaMateriasBorrar[i].carrera;
-      DicTrie<String, Materia> listaDeMaterias = _diccionarioCarreras.obtener(carreraDeDondeBorrar);
-      listaDeMaterias.borrar(listaMateriasBorrar[i].nombreMateria);
+
+    // NO CUMPLE LA COMPLEJIDAD
+    for (int i = 0; i < listaMateriasBorrar2.length ; i++) {
+      ParPunteroAlias data = listaMateriasBorrar2[i];
+      DicTrie<String, Materia> dicDeMaterias = data.getPuntero();
+      dicDeMaterias.borrar(data.getAlias());
     }
+ /*
+    while (listaMateriasBorrar.longitud()!=0) {
+
+      // EL PROBLEMA ESTA ACA AHORA
+      ParPunteroAlias data = listaMateriasBorrar.desencolar();
+      DicTrie<String, Materia> dicDeMaterias = data.getPuntero();
+      dicDeMaterias.borrar(data.getAlias());
+    }*/
     // la complejidad final de este loop es \sum_{n \in n_m}{|c| + |n|}, lo cual es erroneo
   }
 

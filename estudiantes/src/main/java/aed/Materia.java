@@ -7,17 +7,18 @@ public class Materia {
 
   private ArrayList<String> _estudiantes;
   private int[] _docentes;
-
-  public ParCarreraMateria[] get_alias() {
-    return _alias;
+  private ParPunteroAlias[] parPunteroArray;
+  public ParPunteroAlias[] getParPunteroArray() {
+    return parPunteroArray;
   }
 
-  private ParCarreraMateria[] _alias;
+  public void setParPunteroArray(ParPunteroAlias[] parPunteroArray) {
+    this.parPunteroArray = parPunteroArray;
+  }
 
-  public Materia(ParCarreraMateria[] _alias) {
+  public Materia() {
     this._estudiantes = new ArrayList<>();
     this._docentes = new int[] { 0, 0, 0, 0 };
-    this._alias = _alias;
   }
 
   public int get_estudiantes() {
@@ -29,9 +30,7 @@ public class Materia {
   }
 
   public void agregarEstudiante(String estudiante) {
-    if (!_estudiantes.contains(estudiante)) {
       _estudiantes.add(estudiante);
-    }
   }
 
   public int[] get_docentes() {

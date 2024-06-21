@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.util.ArrayList;
+
 public class SistemaSIUTests {
     String[] estudiantes;
     InfoMateria[] infoMaterias;
@@ -316,6 +318,13 @@ public class SistemaSIUTests {
     @Test
     void test_dir(){
         DicTrie coso = new DicTrie();
+        coso.agregar("a",3);
+        coso.agregar("aaa",4);
+        coso.agregar("b",6);
+        coso.agregar("ab",8);
+        coso.agregar("abc",7);
+        ArrayList a = coso.imprimir();
+        coso = new DicTrie();
         coso.agregar("casa",3);
         coso.agregar("casami",4);
         coso.agregar("pepito",6);
