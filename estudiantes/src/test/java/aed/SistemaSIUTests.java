@@ -323,6 +323,7 @@ public class SistemaSIUTests {
         coso.agregar("b",6);
         coso.agregar("ab",8);
         coso.agregar("abc",7);
+        coso.borrar("ap");
         ArrayList a = coso.imprimir();
         coso = new DicTrie();
         coso.agregar("casa",3);

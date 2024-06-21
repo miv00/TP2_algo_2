@@ -10,13 +10,11 @@ public class DicTrie<T extends String,H> {
         ArrayList<Nodo> _siguientes;
         int cantidadDeHijos;
         H significado;
-        Character caracter;
+        
 
         Nodo(H v, Character c) {
             significado = v;
             cantidadDeHijos = 0;
-            caracter = c;
-            // esto se podria cambiar por un Array comun inicializado en 255 posiciones
             _siguientes = new ArrayList<Nodo>();
             for (int i = 0; i < 256; i++) {
                 _siguientes.add(null);
@@ -48,13 +46,6 @@ public class DicTrie<T extends String,H> {
     // si esta lo cambias , si no lo setias y sumas al tamaño
     public void agregar(T claveNueva, H elem) {
         Nodo _actual = _raiz;
-        if (this.esta(claveNueva)) {
-            for (int i = 0; i < claveNueva.length(); i++) {
-                int charAscii = (int) claveNueva.charAt(i);
-                _actual = _actual._siguientes.get(charAscii);
-            }
-            _actual.significado = elem;
-        } else {
             for (int i = 0; i < claveNueva.length(); i++) {
                 int charAscci = (int) claveNueva.charAt(i);
                 if (_actual._siguientes.get(charAscci) != null) {
@@ -66,18 +57,19 @@ public class DicTrie<T extends String,H> {
                     _actual = _actual._siguientes.get(charAscci);
                 }
             }
+            if (_actual.significado==null){
+                _tamaño++;
+            }
             _actual.significado = elem;
-            _tamaño++;
         }
-    }
+
 
     // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
     public H obtener(T clave) {
         Nodo _actual = _raiz;
         for (int i = 0; i < clave.length(); i++) {
-            int charAscci = (int) clave.charAt(i);
+            int charAscci = clave.charAt(i);
             _actual = _actual._siguientes.get(charAscci);
-
         }
         return _actual.significado;
     }
@@ -86,7 +78,7 @@ public class DicTrie<T extends String,H> {
     public boolean esta(T clave) {
         Nodo _actual = _raiz;
         for (int i = 0; i < clave.length(); i++) {
-            int charAscci = (int) clave.charAt(i);
+            int charAscci = (clave.charAt(i));
             if (_actual._siguientes.get(charAscci) != null) {
                 _actual = _actual._siguientes.get(charAscci);
             } else {
@@ -100,9 +92,9 @@ public class DicTrie<T extends String,H> {
     // tambien puede pasar que la clave a borrar se prefijo de otra en ese caso solo se borra el significado y queda todo igual
 
     public void borrar(T clave) {
-        if (this.esta(clave)) {
             Nodo _actual = _raiz;
             Nodo ultimoNodoUtil = _raiz;
+            boolean esta=true;
             int ultimaClaveAborrar = clave.charAt(0);
             for (int i = 0; i < clave.length(); i++) {
                 int charAscci = (int) clave.charAt(i);
@@ -110,16 +102,22 @@ public class DicTrie<T extends String,H> {
                     ultimoNodoUtil = _actual;
                     ultimaClaveAborrar = charAscci;
                 }
-                _actual = _actual._siguientes.get(charAscci);
+                if (_actual._siguientes.get(charAscci)==null){
+                    esta=false;
+                }else {
+                    _actual = _actual._siguientes.get(charAscci);
+                }
             }
+            if (esta){
             _actual.significado = null;
             this._tamaño--;
             if (_actual.esNodoInutil()) {
                 ultimoNodoUtil._siguientes.set(ultimaClaveAborrar, null);
                 ultimoNodoUtil.cantidadDeHijos--;
             }
+            }
 
-        }
+
     }
 
     public ArrayList<String> imprimir() {
@@ -133,7 +131,7 @@ public class DicTrie<T extends String,H> {
     // lo termine armando por recursion
     private class DicTrie_Iterador {
         private Nodo _actual;
-        private Nodo _ultimoNodoUtilVisitado;
+
         private ArrayList<String> _claves;
 
         private int _ultimoAscciCode;
@@ -142,7 +140,6 @@ public class DicTrie<T extends String,H> {
 
         public DicTrie_Iterador() {
             _actual = _raiz;
-            _ultimoNodoUtilVisitado = _raiz;
             _stringActual = new StringBuilder();
 
             this._claves = new ArrayList<>();
@@ -154,6 +151,10 @@ public class DicTrie<T extends String,H> {
                 irAlNodoConMasHijosSuperior();
             }
             return _claves;
+        }
+
+        public boolean haySiguiente() {
+            return _claves.size() < _tamaño;
         }
 
         public void irAlNodoConMasHijosSuperior() {
@@ -183,12 +184,6 @@ public class DicTrie<T extends String,H> {
             }
             return a;
         }
-
-
-        public boolean haySiguiente() {
-            return _claves.size() < _tamaño;
-        }
-
 
         //busca la primera clave mas a la izquierda
         public void siguienteClaveMasAlaIzq(){

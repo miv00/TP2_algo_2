@@ -120,15 +120,7 @@ public class SistemaSIU {
       DicTrie<String, Materia> dicDeMaterias = data.getPuntero();
       dicDeMaterias.borrar(data.getAlias());
     }
- /*
-    while (listaMateriasBorrar.longitud()!=0) {
 
-      // EL PROBLEMA ESTA ACA AHORA
-      ParPunteroAlias data = listaMateriasBorrar.desencolar();
-      DicTrie<String, Materia> dicDeMaterias = data.getPuntero();
-      dicDeMaterias.borrar(data.getAlias());
-    }*/
-    // la complejidad final de este loop es \sum_{n \in n_m}{|c| + |n|}, lo cual es erroneo
   }
 
   // Complejidad: O(|c| + |m| + 1) = O(|c| + |m|)
