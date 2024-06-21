@@ -121,12 +121,99 @@ public class DicTrie<T extends String,H> {
 
         }
     }
+
+    public ArrayList<String> imprimir() {
+        DicTrie_Iterador iterador = new DicTrie_Iterador();
+        ArrayList<String> e = iterador.anotarClaves();
+        return e;
+
+    }
+
+    // probablemente se termine armando por recursion o anotando las claves en una variable interna
+    // lo termine armando por recursion
+    private class DicTrie_Iterador {
+        private Nodo _actual;
+        private Nodo _ultimoNodoUtilVisitado;
+        private ArrayList<String> _claves;
+
+        private int _ultimoAscciCode;
+
+        private StringBuilder _stringActual;
+
+        public DicTrie_Iterador() {
+            _actual = _raiz;
+            _ultimoNodoUtilVisitado = _raiz;
+            _stringActual = new StringBuilder();
+
+            this._claves = new ArrayList<>();
+            ;
+        }
+        public ArrayList<String> anotarClaves(){
+            while (haySiguiente()){
+                siguienteClaveMasAlaIzq();
+                irAlNodoConMasHijosSuperior();
+            }
+            return _claves;
+        }
+
+        public void irAlNodoConMasHijosSuperior() {
+           while (noQuedaNadaParaAcceder() && haySiguiente()){
+               _ultimoAscciCode= _stringActual.charAt((_stringActual.length()-1))+1;
+               _stringActual.deleteCharAt(_stringActual.length()-1);
+               _actual= irAlNodo(_stringActual.toString());
+           }
+
+
+        }
+        public boolean noQuedaNadaParaAcceder(){
+            for (int i = _ultimoAscciCode; i <256 ; i++) {
+                if (_actual._siguientes.get(i)!=null){
+                    return false;
+                }
+            }
+            if (_actual.equals(_raiz)){
+                return false;
+            }
+            return true;
+        }
+        public Nodo irAlNodo(String busqueda){
+            Nodo a =_raiz;
+            for (int i = 0; i < busqueda.length(); i++) {
+               a=a._siguientes.get(busqueda.charAt(i));
+            }
+            return a;
+        }
+
+
+        public boolean haySiguiente() {
+            return _claves.size() < _tamaño;
+        }
+
+
+        //busca la primera clave mas a la izquierda
+        public void siguienteClaveMasAlaIzq(){
+            for (int i = _ultimoAscciCode; i <256 ; i++) {
+
+                if (_actual._siguientes.get(i)!=null){
+                    _stringActual.append((char) i);
+                    _actual=_actual._siguientes.get(i);
+                    if (_actual.significado!=null){
+                        _claves.add(_stringActual.toString());
+                    }
+                    i=0;
+                }
+            }
+        }
+    }
 }
 
-//    public ArrayList<String> imprimir() {
-//        DicTrie_Iterador iterador = new DicTrie_Iterador();
-//        ArrayList<String> e = iterador.clavesArmar();
-//        return e;
-//
-//    }
+
+
+
+
+
+
+
+
+
 
