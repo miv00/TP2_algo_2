@@ -37,68 +37,68 @@ public class DicTrie<T extends String,H> {
             return conSignificado || hijos;
         }
     }
-        public DicTrie() {
-            _raiz = new Nodo(null,null);
-            _tamaño = 0;
+    public DicTrie() {
+        _raiz = new Nodo(null,null);
+        _tamaño = 0;
 
-        }
-        //basicamente es o entrar a la pos del array que es igual al char en ascii o crearlo, eso es O(longitud de la clave)
-        //tambien chekea si es que esta y entra, se puede optimizar creo ... (probablemente chekiando al final si el elemento esta o no )
-        //Optimizacion :lo que hay que hacer basicamente es no preguntar si esta y al final antes de cambiar el signficado ver si esta o no en null
-        // si esta lo cambias , si no lo setias y sumas al tamaño
-        public void agregar(T claveNueva, H elem) {
-            Nodo _actual = _raiz;
-            if (this.esta(claveNueva)){
-                for (int i = 0; i <claveNueva.length() ; i++) {
-                    int charAscii = (int) claveNueva.charAt(i);
-                    _actual =_actual._siguientes.get(charAscii);
-                }
-                _actual.significado = elem;
-            }else{
+    }
+    //basicamente es o entrar a la pos del array que es igual al char en ascii o crearlo, eso es O(longitud de la clave)
+    //tambien chekea si es que esta y entra, se puede optimizar creo ... (probablemente chekiando al final si el elemento esta o no )
+    //Optimizacion :lo que hay que hacer basicamente es no preguntar si esta y al final antes de cambiar el signficado ver si esta o no en null
+    // si esta lo cambias , si no lo setias y sumas al tamaño
+    public void agregar(T claveNueva, H elem) {
+        Nodo _actual = _raiz;
+        if (this.esta(claveNueva)){
+            for (int i = 0; i <claveNueva.length() ; i++) {
+                int charAscii = (int) claveNueva.charAt(i);
+                _actual =_actual._siguientes.get(charAscii);
+            }
+            _actual.significado = elem;
+        }else{
             for (int i = 0; i < claveNueva.length(); i++) {
                 int charAscci = (int) claveNueva.charAt(i);
                 if (_actual._siguientes.get(charAscci) != null) {
                     _actual =_actual._siguientes.get(charAscci);
                 } else {
-                   Nodo nuevo = new Nodo(null,(char)charAscci);
-                   _actual._siguientes.set(charAscci,nuevo);
-                   _actual.cantidadDeHijos++;
-                   _actual=_actual._siguientes.get(charAscci);
+                    Nodo nuevo = new Nodo(null,(char)charAscci);
+                    _actual._siguientes.set(charAscci,nuevo);
+                    _actual.cantidadDeHijos++;
+                    _actual=_actual._siguientes.get(charAscci);
                 }
             }
             _actual.significado = elem;
             _tamaño++;
-            }
         }
-        // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
-        public H obtener(T clave) {
-            Nodo _actual = _raiz;
-            for (int i = 0; i < clave.length(); i++) {
-                int charAscci = (int) clave.charAt(i);
-                _actual = _actual._siguientes.get(charAscci);
-
-            }
-            return _actual.significado;
-        }
+    }
     // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
-        public boolean esta(T clave) {
-            Nodo _actual = _raiz;
-            for (int i = 0; i < clave.length(); i++) {
-                int charAscci = (int) clave.charAt(i);
-                if (_actual._siguientes.get(charAscci) != null) {
-                    _actual = _actual._siguientes.get(charAscci);
-                } else {
-                    return false;
-                }
-            }
-            return _actual.significado!=null;
-        }
-        // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
-        // lo complicado de este metodo es sacar  el  ultimoNodoutil que o bien es la raiz o es alguno que tenga mas de dos hijos
-        // tambien puede pasar que la clave a borrar se prefijo de otra en ese caso solo se borra el significado y queda todo igual
+    public H obtener(T clave) {
+        Nodo _actual = _raiz;
+        for (int i = 0; i < clave.length(); i++) {
+            int charAscci = (int) clave.charAt(i);
+            _actual = _actual._siguientes.get(charAscci);
 
-        public void borrar(T clave) {
-            if (this.esta(clave)){
+        }
+        return _actual.significado;
+    }
+    // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
+    public boolean esta(T clave) {
+        Nodo _actual = _raiz;
+        for (int i = 0; i < clave.length(); i++) {
+            int charAscci = (int) clave.charAt(i);
+            if (_actual._siguientes.get(charAscci) != null) {
+                _actual = _actual._siguientes.get(charAscci);
+            } else {
+                return false;
+            }
+        }
+        return _actual.significado!=null;
+    }
+    // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
+    // lo complicado de este metodo es sacar  el  ultimoNodoutil que o bien es la raiz o es alguno que tenga mas de dos hijos
+    // tambien puede pasar que la clave a borrar se prefijo de otra en ese caso solo se borra el significado y queda todo igual
+
+    public void borrar(T clave) {
+        if (this.esta(clave)){
             Nodo _actual = _raiz;
             Nodo ultimoNodoUtil = _raiz;
             int ultimaClaveAborrar = clave.charAt(0);
@@ -187,21 +187,12 @@ public class DicTrie<T extends String,H> {
             for (int i = valor; i <nodo._siguientes.size() ; i++) {
                 if (actual._siguientes.get(i)!=null){
                     recorrerRursivo(actual._siguientes.get(i),prefijo.toString(),0);
-                    }
-                else{
-
-                    }
+                }
+            }
         }
-    }
-
-
-
-
-
-
 
     }
 
 
 
-    }
+}
