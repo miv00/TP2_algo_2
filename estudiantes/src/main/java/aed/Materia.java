@@ -6,17 +6,21 @@ public class Materia {
 
     private DicTrie<String, Boolean> _estudiantes;
     private int[] _docentes;
-    private ParCarreraMateria[] _alias;
+    private ParPunteroAlias[] parPunteroArray;
 
-    public ParCarreraMateria[] get_alias() {
-        return _alias;
+    public ParPunteroAlias[] getParPunteroArray() {
+        return parPunteroArray;
     }
 
-    public Materia(ParCarreraMateria[] _alias) {
-        this._estudiantes = new DicTrie<>();
+    public void setParPunteroArray(ParPunteroAlias[] parPunteroArray) {
+        this.parPunteroArray = parPunteroArray;
+    }
+
+    public Materia() {
+        this._estudiantes = new DicTrie();
         this._docentes = new int[] { 0, 0, 0, 0 };
-        this._alias = _alias;
     }
+
 
     public int get_estudiantes() {
         return _estudiantes._tamaño;
