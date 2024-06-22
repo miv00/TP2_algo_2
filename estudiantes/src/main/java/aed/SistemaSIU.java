@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class SistemaSIU {
     private DicTrie<String, DicTrie<String, Materia>> _diccionarioCarreras;
+
     private DicTrie<String, Integer> _diccionarioestudiantes;
 
     enum CargoDocente {
@@ -15,42 +16,42 @@ public class SistemaSIU {
 
     // Complejidad: O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n| + E)
     public SistemaSIU(InfoMateria[] infoMaterias, String[] libretasUniversitarias) {
-        _diccionarioCarreras = new DicTrie<String, DicTrie<String, Materia>>();
-        _diccionarioestudiantes = new DicTrie<String, Integer>();
-        // Para cada InfoMateria en infoMaterias: O(infoMaterias.length)
+        _diccionarioCarreras = new DicTrie<String, DicTrie<String, Materia>>(); // O(1)
+        _diccionarioestudiantes = new DicTrie<String, Integer>(); // O(1)
+        // O(sum_{c \in C} .... )
         for (int i = 0; i < infoMaterias.length; i++) {
 
             ParCarreraMateria[] par = infoMaterias[i].getParesCarreraMateria(); // O(1)
-            Materia materia = new Materia(par); // O(1)
-            // Para cada ParCarreraMateria en par: O(par.length)
+            ParPunteroAlias[] parPunteroArray = new ParPunteroAlias[par.length]; //O(par.length)
+            Materia materia = new Materia(); // O(1)
+            materia.setParPunteroArray(parPunteroArray); // O(1)
+            // O(sum_{N \in N_c} .... )
             for (int j = 0; j < par.length; j++) {
                 String carrera = par[j].getCarrera(); // O(1)
                 String nombreMateria = par[j].getNombreMateria(); // O(1)
-                // Si la carrera ya está en el diccionario
-                if (_diccionarioCarreras.esta(carrera)) { // O(|carrera|)
-                    DicTrie<String, Materia> dicCarreas = _diccionarioCarreras.obtener(carrera); // O(|carrera|)
-                    dicCarreas.agregar(nombreMateria, materia); // O(|nombreMateria|)
-                } else {
+                DicTrie<String, Materia> dicCarreas; // O(1)
+                //si no esta crearla
+                if (!_diccionarioCarreras.esta(carrera)) { // O(|carrera|)
                     _diccionarioCarreras.agregar(carrera, new DicTrie<>()); // O(|carrera|)
-                    DicTrie<String, Materia> dicCarreas = _diccionarioCarreras.obtener(carrera); // O(|carrera|)
-                    dicCarreas.agregar(nombreMateria, materia); // O(|nombreMateria|)
                 }
+
+                dicCarreas = _diccionarioCarreras.obtener(carrera); // O(|carrera|)
+                ParPunteroAlias alias = new ParPunteroAlias(dicCarreas,nombreMateria); // O(1)
+                parPunteroArray[j]= alias;  // O(1)
+                dicCarreas.agregar(nombreMateria, materia);  // O(|nombreMateria|)
             }
+
         }
 
         // Complejidad de la sección anterior:
-        // Para cada carrera c en infoMaterias, se ejecuta O(|c|) para `esta` y `_diccionarioCarreras.agregar`.
-        // Para cada materia m en la carrera c, se ejecuta O(|c|) para cada `obtener`.
-        // Para cada nombreMateria en cada materia m en la carrera c, se ejecuta O(|nombreMateria|) para los ` dicCarreas.agregar`.
+        // Total: O(sum_{c \in C} sum_{n \in N_c} (|c| + |n|) = O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n|)
+        // N_c es el conjunto de nombres de las materias de la carrera c y claramente tiene el mismo cardinal que M_c
+        // y por otro lado sum_{c \in C} sum_{n \in N_c} |n| = sum_{m \in M} sum_{n \in N_m} |n|
 
-        // Total: O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n|)
-
-        // Para cada libreta universitaria: O(libretasUniversitarias.length)
+        // Complejidad: O(E)
         for (int i = 0; i < libretasUniversitarias.length; i++) {
             _diccionarioestudiantes.agregar(libretasUniversitarias[i], 0); // O(1)
         }
-        // Complejidad de la sección anterior: O(E)
-
         // Complejidad total del constructor:
         // O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n| + E)
     }
@@ -163,15 +164,15 @@ public class SistemaSIU {
     }
 
 
-    // TODO: Difieren las complejidades - Revisar estructura.
+    // Complejidad: O(|c| + |m| + sum_{n \in N_m} |n| + |c_n|)
     public void cerrarMateria(String materia, String carrera) {
         // O(|c|)
         DicTrie<String, Materia> dicMaterias = _diccionarioCarreras.obtener(carrera);
         // O(|m|)
         Materia mat = dicMaterias.obtener(materia);
-        // O(1)
-        ParCarreraMateria[] listaMateriasBorrar = mat.get_alias();
 
+        // O(1)
+        ParPunteroAlias[] listaMateriasBorrar = mat.getParPunteroArray();
         // O(E_m)
         for (int i = 0; i < mat.lista_estudiantes().size(); i++) {
             // O(1)
@@ -182,12 +183,18 @@ public class SistemaSIU {
             _diccionarioestudiantes.agregar(estudiante, cant - 1);
         }
 
-        // O(sum_{n \in N_m} |n| + |c_n|)
-        for (int i = 0; i < listaMateriasBorrar.length; i++) {
-            String carreraDeDondeBorrar = listaMateriasBorrar[i].carrera; // O(1)
-            DicTrie<String, Materia> listaDeMaterias = _diccionarioCarreras.obtener(carreraDeDondeBorrar); // O(|c_n|) c_n es carrera que tiene a la materia m
-            listaDeMaterias.borrar(listaMateriasBorrar[i].nombreMateria); // O(|n|) n es un nombre de la materia m
+
+        // O(Sum_{n \in N_m} |n|)
+        for (int i = 0; i < listaMateriasBorrar.length ; i++) {
+            // O(1)
+            ParPunteroAlias data = listaMateriasBorrar[i];
+            // O(1)
+            DicTrie<String, Materia> dicDeMaterias = data.getPuntero();
+            // O(|n|)
+            dicDeMaterias.borrar(data.getAlias());
         }
-        // la complejidad final de este loop es \sum_{n \in n_m}{|c_n| + |n|}, lo cual es erroneo
+        // Complejidad total:
+        // O( |c| + |m| + Sum_{n \in N_m} |n| + E_m)
     }
+
 }
