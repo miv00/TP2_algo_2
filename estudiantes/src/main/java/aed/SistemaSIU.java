@@ -124,28 +124,35 @@ public class SistemaSIU {
     }
 
 
-    // TODO: imprimir usa recursion, repensar.
+    // Complejidad: O(sum_{c \in C} |c|)
     public String[] carreras() {
+        //  O(sum_{c \in C} |c|)
         ArrayList<String> listado = _diccionarioCarreras.imprimir();
-        String[] res = new String[listado.size()];
+        String[] res = new String[listado.size()];// O(1)
+        //  O(sum_{c \in C} 1)
         for (int i = 0; i < listado.size(); i++) {
-            res[i] = listado.get(i);
+            res[i] = listado.get(i); // O(1)
         }
         return res;
+        // Complejidad total:
+        // O(sum_{c \in C} |c|)
     }
 
-    // TODO: imprimir usa recursion, repensar.
+
+    // Complejidad: O( |c| + sum_{m_c \in M_c} |m_c|)
     public String[] materias(String carrera) {
+        // O(|c|)
         DicTrie<String, Materia> carreraImprimir = _diccionarioCarreras.obtener(carrera);
+        // O(sum_{m_c \in M_c} |m_c|)
         ArrayList<String> listado = carreraImprimir.imprimir();
-
-        String[] res = new String[listado.size()];
-
+        String[] res = new String[listado.size()]; // O(1)
+        // O(sum_{m_c \in M_c} 1)
         for (int i = 0; i < listado.size(); i++) {
-            res[i] = listado.get(i);
+            res[i] = listado.get(i); // O(1)
         }
-
         return res;
+        // Complejidad total:
+        // O( |c| + sum_{m_c \in M_c} |m_c|)
     }
 
 
