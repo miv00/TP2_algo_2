@@ -5,10 +5,10 @@ public class InfoMateria{
     private ParCarreraMateria[] paresCarreraMateria;
 
     public InfoMateria(ParCarreraMateria[] paresCarreraMateria){
-        this.paresCarreraMateria = paresCarreraMateria;
+        this.paresCarreraMateria = paresCarreraMateria; // O(1)
     }
 
     public ParCarreraMateria[] getParesCarreraMateria() {
-        return this.paresCarreraMateria;
+        return this.paresCarreraMateria; // O(1)
     }
 }
