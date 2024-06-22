@@ -53,6 +53,7 @@ public class Materia {
         }
     }
 
+    // O(1)
     public boolean excedeCupo() {
         int cantEstudiantes = _estudiantes._tamaño;
         boolean excedeProfesor = _docentes[0] * 250 < cantEstudiantes;
