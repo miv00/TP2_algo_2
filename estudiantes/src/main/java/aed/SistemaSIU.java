@@ -22,7 +22,7 @@ public class SistemaSIU {
         for (int i = 0; i < infoMaterias.length; i++) {
 
             ParCarreraMateria[] par = infoMaterias[i].getParesCarreraMateria(); // O(1)
-            ParPunteroAlias[] parPunteroArray = new ParPunteroAlias[par.length]; //O(par.length)
+            ParPunteroAlias[] parPunteroArray = new ParPunteroAlias[par.length]; //O(sum_{n \in N_c} 1 )
             Materia materia = new Materia(); // O(1)
             materia.setParPunteroArray(parPunteroArray); // O(1)
             // O(sum_{N \in N_c} .... )
@@ -44,7 +44,7 @@ public class SistemaSIU {
         }
 
         // Complejidad de la sección anterior:
-        // Total: O(sum_{c \in C} sum_{n \in N_c} (|c| + |n|) = O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n|)
+        // Total: O(sum_{c \in C} sum_{n \in N_c} (|c| + |n| + 1 ) +  = O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n|)
         // N_c es el conjunto de nombres de las materias de la carrera c y claramente tiene el mismo cardinal que M_c
         // y por otro lado sum_{c \in C} sum_{n \in N_c} |n| = sum_{m \in M} sum_{n \in N_m} |n|
 
