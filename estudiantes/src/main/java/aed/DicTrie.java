@@ -1,198 +1,199 @@
 package aed;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-public class DicTrie<T extends String,H> {
+public class DicTrie<T extends String, H> {
     private Nodo _raiz;
     int _tamaño;
-
 
     private class Nodo {
         ArrayList<Nodo> _siguientes;
         int cantidadDeHijos;
         H significado;
-        Character caracter ;
+        Character caracter;
 
-        Nodo(H v,Character c) {
-            significado = v;
-            cantidadDeHijos = 0;
-            caracter = c;
-            // esto se podria cambiar por un Array comun inicializado en 255 posiciones
-            _siguientes= new ArrayList<Nodo>();
+        Nodo(H v, Character c) {
+            significado = v;                      // O(1)
+            cantidadDeHijos = 0;                  // O(1)
+            caracter = c;                         // O(1)
+            _siguientes = new ArrayList<>(256);   // O(256)
             for (int i = 0; i < 256; i++) {
-                _siguientes.add(null);
+                _siguientes.add(null);            // O(256)
             }
         }
 
         public boolean esNodoInutil() {
-            boolean sinSignificado = significado == null;
-            boolean sinHijos = this.cantidadDeHijos == 0;
-            return sinSignificado && sinHijos;
+            boolean sinSignificado = significado == null;  // O(1)
+            boolean sinHijos = this.cantidadDeHijos == 0;  // O(1)
+            return sinSignificado && sinHijos;             // O(1)
         }
 
         public boolean masDeUnHijoOtieneSignificado() {
-            boolean conSignificado = significado != null;
-            boolean hijos = this.cantidadDeHijos > 1;
-            return conSignificado || hijos;
+            boolean conSignificado = significado != null;  // O(1)
+            boolean hijos = this.cantidadDeHijos > 1;      // O(1)
+            return conSignificado || hijos;                // O(1)
         }
     }
+
     public DicTrie() {
-        _raiz = new Nodo(null,null);
-        _tamaño = 0;
-
+        _raiz = new Nodo(null, null);   // O(256)
+        _tamaño = 0;                   // O(1)
     }
-    //basicamente es o entrar a la pos del array que es igual al char en ascii o crearlo, eso es O(longitud de la clave)
-    //tambien chekea si es que esta y entra, se puede optimizar creo ... (probablemente chekiando al final si el elemento esta o no )
-    //Optimizacion :lo que hay que hacer basicamente es no preguntar si esta y al final antes de cambiar el signficado ver si esta o no en null
-    // si esta lo cambias , si no lo setias y sumas al tamaño
+
+    // Complejidad: O(|claveNueva|)
     public void agregar(T claveNueva, H elem) {
-        Nodo _actual = _raiz;
-        if (this.esta(claveNueva)){
-            for (int i = 0; i <claveNueva.length() ; i++) {
-                int charAscii = (int) claveNueva.charAt(i);
-                _actual =_actual._siguientes.get(charAscii);
-            }
-            _actual.significado = elem;
-        }else{
+        Nodo _actual = _raiz;           // O(1)
+        if (this.esta(claveNueva)) {    // O(|claveNueva|)
             for (int i = 0; i < claveNueva.length(); i++) {
-                int charAscci = (int) claveNueva.charAt(i);
-                if (_actual._siguientes.get(charAscci) != null) {
-                    _actual =_actual._siguientes.get(charAscci);
+                int charAscii = (int) claveNueva.charAt(i);  // O(1)
+                _actual = _actual._siguientes.get(charAscii); // O(1)
+            }
+            _actual.significado = elem; // O(1)
+        } else {
+            for (int i = 0; i < claveNueva.length(); i++) {
+                int charAscii = (int) claveNueva.charAt(i);  // O(1)
+                if (_actual._siguientes.get(charAscii) != null) {
+                    _actual = _actual._siguientes.get(charAscii); // O(1)
                 } else {
-                    Nodo nuevo = new Nodo(null,(char)charAscci);
-                    _actual._siguientes.set(charAscci,nuevo);
-                    _actual.cantidadDeHijos++;
-                    _actual=_actual._siguientes.get(charAscci);
+                    Nodo nuevo = new Nodo(null, (char) charAscii);  // O(256)
+                    _actual._siguientes.set(charAscii, nuevo);      // O(1)
+                    _actual.cantidadDeHijos++;                      // O(1)
+                    _actual = _actual._siguientes.get(charAscii);   // O(1)
                 }
             }
-            _actual.significado = elem;
-            _tamaño++;
+            _actual.significado = elem; // O(1)
+            _tamaño++;                  // O(1)
         }
     }
-    // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
+
+    // Complejidad: O(|clave|)
     public H obtener(T clave) {
-        Nodo _actual = _raiz;
+        Nodo _actual = _raiz;           // O(1)
+        // O(|clave|)
         for (int i = 0; i < clave.length(); i++) {
-            int charAscci = (int) clave.charAt(i);
-            _actual = _actual._siguientes.get(charAscci);
-
+            int charAscii = (int) clave.charAt(i);  // O(1)
+            _actual = _actual._siguientes.get(charAscii); // O(1)
         }
-        return _actual.significado;
+        return _actual.significado;     // O(1)
     }
-    // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
+
+    // Complejidad: O(|clave|)
     public boolean esta(T clave) {
-        Nodo _actual = _raiz;
+        Nodo _actual = _raiz;           // O(1)
+        // O(|clave|)
         for (int i = 0; i < clave.length(); i++) {
-            int charAscci = (int) clave.charAt(i);
-            if (_actual._siguientes.get(charAscci) != null) {
-                _actual = _actual._siguientes.get(charAscci);
+            int charAscii = (int) clave.charAt(i);  // O(1)
+            if (_actual._siguientes.get(charAscii) != null) {
+                _actual = _actual._siguientes.get(charAscii); // O(1)
             } else {
-                return false;
+                return false;            // O(1)
             }
         }
-        return _actual.significado!=null;
+        return _actual.significado != null; // O(1)
     }
-    // mismo que el anterior usu fuertemente que los arrays tienen en las posiciones los chars etc para que la complejidad sea el largo de la  clave
-    // lo complicado de este metodo es sacar  el  ultimoNodoutil que o bien es la raiz o es alguno que tenga mas de dos hijos
-    // tambien puede pasar que la clave a borrar se prefijo de otra en ese caso solo se borra el significado y queda todo igual
 
+    // Complejidad: O(|clave|)
     public void borrar(T clave) {
-        if (this.esta(clave)){
-            Nodo _actual = _raiz;
-            Nodo ultimoNodoUtil = _raiz;
-            int ultimaClaveAborrar = clave.charAt(0);
+        if (this.esta(clave)) {          // O(|clave|)
+            Nodo _actual = _raiz;        // O(1)
+            Nodo ultimoNodoUtil = _raiz; // O(1)
+            int ultimaClaveAborrar = clave.charAt(0);  // O(1)
+            // O(|clave|)
             for (int i = 0; i < clave.length(); i++) {
-                int charAscci = (int) clave.charAt(i);
+                int charAscii = (int) clave.charAt(i);  // O(1)
                 if (_actual.masDeUnHijoOtieneSignificado()) {
-                    ultimoNodoUtil = _actual;
-                    ultimaClaveAborrar = charAscci;
+                    ultimoNodoUtil = _actual;          // O(1)
+                    ultimaClaveAborrar = charAscii;    // O(1)
                 }
-                _actual = _actual._siguientes.get(charAscci);
+                _actual = _actual._siguientes.get(charAscii); // O(1)
             }
-            _actual.significado = null;
-            this._tamaño--;
+            _actual.significado = null; // O(1)
+            this._tamaño--;             // O(1)
             if (_actual.esNodoInutil()) {
-                ultimoNodoUtil._siguientes.set(ultimaClaveAborrar, null);
-                ultimoNodoUtil.cantidadDeHijos--;
+                ultimoNodoUtil._siguientes.set(ultimaClaveAborrar, null); // O(1)
+                ultimoNodoUtil.cantidadDeHijos--;                         // O(1)
             }
-
         }
     }
-    public ArrayList<String> imprimir(){
+
+    // Voy a usar C para el conjunto de claves y |c| para la longitud de una clave c \in C
+
+    // Complejidad: O(sum_{c \in C} |c|)
+    public ArrayList<String> imprimir() {
         DicTrie_Iterador iterador = new DicTrie_Iterador();
-        ArrayList<String> e = iterador.armarClaves();
-        return e;
-
+        return iterador.armarClaves();  // O(sum_{c \in C} |c|)
     }
-    // probablemente se termine armando por recursion o anotando las claves en una variable interna
-    // lo termine armando por recursion
-    private class DicTrie_Iterador   {
-        private Nodo _ultimoNodoConMasDeUnHijo;
+
+    private class DicTrie_Iterador {
         private ArrayList<String> claves;
-        private int ultimoAscciCode;
 
-        public  DicTrie_Iterador(){
-            _ultimoNodoConMasDeUnHijo = _raiz;
-            this.claves=new ArrayList<>();
-            ;
-        }
-        public ArrayList<String> armarClaves(){
-            recorrerRursivo(_raiz,"",0);
-            return claves;
+        public DicTrie_Iterador() {
+            this.claves = new ArrayList<>();  // O(1)
         }
 
-        //para hacerlo iterativo lo que habria que hacer es tener mucho cuidado y guardar ,el nodo, el prefijo y el i al momento de encontrar un clave
-        //no es muy dificil pero termina haciendo lo mismo que la recursion
-        // si no la otra es al momento de agregar la clave guardarla en un array pero eso ya creo que es n por ser la longitud del arreglo
+        // Complejidad: O(sum_{c \in C} |c|)
+        public ArrayList<String> armarClaves() {
+            recorrerIterativo();             // O(sum_{c \in C} |c|)
+            return claves;                   // O(1)
+        }
 
-        /*public void recorrer(Nodo nodo,StringBuilder prefijo ,int valor ){
-            Nodo actual = nodo;
-            for (int i = valor; i <nodo._siguientes.size() ; i++) {
-                if (actual.cantidadDeHijos>1){
-                    _ultimoNodoConMasDeUnHijo=actual;
-                    ultimoAscciCode=i;
-                } if (actual.significado!=null) {
-                    claves.add(prefijo.toString());
+        // Complejidad: O(sum_{c \in C} |c|)
+        private void recorrerIterativo() {
+            Pila<NodoConPrefijo> stack = new Pila<>();  // O(1)
+            stack.push(new NodoConPrefijo(_raiz, new StringBuffer()));  // O(1)
 
-                }if (actual._siguientes.get(i)!=null){
-                    prefijo.append(i);
-                    actual = actual._siguientes.get(i);
-                    i = 0;
-                }else {
-                    claves.add(prefijo.toString());
+            while (!stack.isEmpty()) {       // O(sum_{c \in C} |c|)
+                NodoConPrefijo actualConPrefijo = stack.pop();  // O(1)
+                Nodo actual = actualConPrefijo.nodo;            // O(1)
+                StringBuffer prefijo = actualConPrefijo.prefijo; // O(1)
+
+                if (actual.significado != null) {
+                    claves.add(prefijo.toString());   // O(|prefijo|)
                 }
-            }
-            }
 
-        public void siguiente(){
-            StringBuilder pre = new StringBuilder(claves.get(claves.size()-1));
-            recorrer(_ultimoNodoConMasDeUnHijo,pre,ultimoAscciCode);
-
-        }*/
-
-        //basicamente es lo mismo que antes nada mas que por cada nodo recorre las 255 pos en vez de donde solo esta el dato,si bien parece aumentar mucho la complejidad
-        // al estar fijo el numero en el for pasa a ser constante y a depender de la longitud de las claves
-        public void recorrerRursivo(Nodo nodo,String pre ,int valor ){
-            Nodo actual = nodo;
-            StringBuilder prefijo = new StringBuilder();
-            prefijo.append(pre);
-            // cosas muy cabeza que arme por estar en el laburo
-            if(nodo.caracter!=null){
-                prefijo.append(nodo.caracter);
-            }
-            if (actual.significado!=null) {
-                claves.add(prefijo.toString());
-            }
-            for (int i = valor; i <nodo._siguientes.size() ; i++) {
-                if (actual._siguientes.get(i)!=null){
-                    recorrerRursivo(actual._siguientes.get(i),prefijo.toString(),0);
+                // Iterar sobre los hijos en orden creciente (0 a 255)
+                for (int i = 255; i >= 0; i--) {      // O(1) por iteración, 256 veces
+                    Nodo siguiente = actual._siguientes.get(i);  // O(1)
+                    if (siguiente != null) {
+                        StringBuffer nuevoPrefijo = new StringBuffer(prefijo);  // O(|prefijo|)
+                        nuevoPrefijo.append((char) i);                        // O(1)
+                        stack.push(new NodoConPrefijo(siguiente, nuevoPrefijo)); // O(1)
+                    }
                 }
             }
         }
 
+        private class NodoConPrefijo {
+            Nodo nodo;
+            StringBuffer prefijo;
+
+            NodoConPrefijo(Nodo nodo, StringBuffer prefijo) {
+                this.nodo = nodo;           // O(1)
+                this.prefijo = prefijo;     // O(1)
+            }
+        }
     }
 
+    private class Pila<E> {
+        private ArrayList<E> elementos;
 
+        public Pila() {
+            elementos = new ArrayList<>(); // O(1)
+        }
 
+        public void push(E elem) {
+            elementos.add(elem);           // O(1)
+        }
+
+        public E pop() {
+            if (isEmpty()) {
+                throw new RuntimeException("Pila vacía");
+            }
+            return elementos.remove(elementos.size() - 1);  // O(1)
+        }
+
+        public boolean isEmpty() {
+            return elementos.isEmpty();    // O(1)
+        }
+    }
 }
