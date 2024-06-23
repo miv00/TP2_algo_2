@@ -17,12 +17,10 @@ public class DicTrie<T extends String, H> {
         ArrayList<Nodo> _siguientes;
         int cantidadDeHijos;
         H significado;
-        Character caracter;
 
         Nodo(H v, Character c) {
             significado = v;                      // O(1)
             cantidadDeHijos = 0;                  // O(1)
-            caracter = c;                         // O(1)
             _siguientes = new ArrayList<>(256);   // O(256)
             for (int i = 0; i < 256; i++) {
                 _siguientes.add(null);            // O(256)
