@@ -1,6 +1,10 @@
 package aed;
 
 public class ParPunteroAlias {
+    // Invariante de Representación
+    // punteroMaterias cumple con el invariante de representación de la clase DicTrie.
+    // aliasMateria debe ser una clave valida en el DicTrie punteroMaterias.
+    
     DicTrie<String, Materia> punteroMaterias;
     String aliasMateria;
 
