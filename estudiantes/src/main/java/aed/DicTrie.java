@@ -6,6 +6,12 @@ public class DicTrie<T extends String, H> {
     private Nodo _raiz;
     int _tamaño;
 
+    // Invariante de Representación
+    // El trie siempre tiene que tener un nodo presente (nodo raiz), incluso si el trie esta vacio.
+    // Cada nodo puede tener hasta 256 hijos (uno por cada posible caracter ASCII).
+    // Los nodos tienen un solo padre salvo la raiz (que no tiene padre) ie es un arbol.
+    // Los nodos que no tienen significado tienen hijos.
+
     private class Nodo {
         ArrayList<Nodo> _siguientes;
         int cantidadDeHijos;
