@@ -6,7 +6,6 @@ public class Materia {
     // Invariante de Representación
     // _docentes debe ser un arreglo de 4 enteros y cada posicion debe ser un valor mayor o igual a 0.
     // El DicTrie _estudiantes debe cumplir con el invariante de representacion de  la clase DicTrie.
-    // _estudiantes contiene todos los estudiantes inscriptos en la materia.
     // Para el DicTrie _estudiantes, todos los significados deben ser true.
     // parPunteroArray debe cumplir con el invariante de representacion de  la clase ParPunteroAlias en cada posicion.
 
