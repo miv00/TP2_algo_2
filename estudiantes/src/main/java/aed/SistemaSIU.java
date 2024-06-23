@@ -3,6 +3,12 @@ package aed;
 import java.util.ArrayList;
 
 public class SistemaSIU {
+    // Invariante de Representacion
+    // _diccionarioCarreras y _diccionarioestudiantes cumplen con el invariante de representación de la clase DicTrie.
+    // Las claves de _diccionarioCarreras cumplen con el invariante de representación de la clase DicTrie.
+    // Las claves de las claves de _diccionarioCarreras cumple con el invariante de representación de la clase Materia.
+    // Las claves del DicTrie _diccionarioestudiantes deben ser numeros enteros mayores o iguales a 0.
+    
     private DicTrie<String, DicTrie<String, Materia>> _diccionarioCarreras;
 
     private DicTrie<String, Integer> _diccionarioestudiantes;
