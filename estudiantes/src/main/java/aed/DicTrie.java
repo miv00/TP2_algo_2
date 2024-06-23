@@ -3,15 +3,15 @@ package aed;
 import java.util.ArrayList;
 
 public class DicTrie<T extends String, H> {
+    private Nodo _raiz;
+    int _tamaño;
+
     // Invariante de Representación
     // El trie siempre tiene que tener un nodo presente (nodo raiz), incluso si el trie esta vacio.
     // Las claves deben ser strings comprendidos por caracteres ASCII.
     // Cada nodo puede tener hasta 256 hijos (uno por cada posible caracter ASCII).
     // Los nodos tienen un solo padre salvo la raiz (que no tiene padre) ie es un arbol.
     // Los nodos que no tienen significado tienen hijos.
-    
-    private Nodo _raiz;
-    int _tamaño;
 
     private class Nodo {
         ArrayList<Nodo> _siguientes;
@@ -41,7 +41,7 @@ public class DicTrie<T extends String, H> {
     }
 
     public DicTrie() {
-        _raiz = new Nodo(null, null);   // O(256)
+        _raiz = new Nodo(null, null);   // O(1)
         _tamaño = 0;                   // O(1)
     }
 
