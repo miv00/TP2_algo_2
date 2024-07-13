@@ -18,9 +18,10 @@ public class Materia {
         return parPunteroArray; // O(1)
     }
 
+    /*
     public void setParPunteroArray(ParPunteroAlias[] parPunteroArray) {
         this.parPunteroArray = parPunteroArray; // O(1)
-    }
+    }*/
 
     public Materia(ParPunteroAlias[] parPunteroArray) {
         this._estudiantes = new DicTrie(); // O(1)
