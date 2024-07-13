@@ -11,7 +11,7 @@ public class DicTrie<T extends String, H> {
     // Las claves deben ser strings comprendidos por caracteres ASCII.
     // Cada nodo puede tener hasta 256 hijos (uno por cada posible caracter ASCII).
     // Los nodos tienen un solo padre salvo la raiz (que no tiene padre) ie es un arbol.
-    // Los nodos que no tienen significado tienen hijos.
+    // Los nodos que no son la raiz y no tienen significado, tienen hijos.
 
     private class Nodo {
         ArrayList<Nodo> _siguientes;
