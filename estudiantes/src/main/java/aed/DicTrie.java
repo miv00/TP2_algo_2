@@ -157,10 +157,10 @@ public class DicTrie<T extends String, H> {
                 }
 
                 // Iterar sobre los hijos en orden creciente (0 a 255)
-                for (int i = 255; i >= 0; i--) {      // O(1) por iteración, 256 veces
+                for (int i = 255; i >= 0; i--) {      // O(|prefijo|) Porque haces O(1) iteraciones, todas con complejidad O(|prefijo|).
                     Nodo siguiente = actual._siguientes.get(i);  // O(1)
                     if (siguiente != null) {
-                        StringBuffer nuevoPrefijo = new StringBuffer(prefijo);  // O(|prefijo|)
+                        StringBuffer nuevoPrefijo = new StringBuffer(prefijo);  // O(|prefijo|) 
                         nuevoPrefijo.append((char) i);                        // O(1)
                         stack.push(new NodoConPrefijo(siguiente, nuevoPrefijo)); // O(1)
                     }
@@ -207,10 +207,11 @@ public class DicTrie<T extends String, H> {
 DicTrie:
 @TODO
     - El constructor de Nodo tiene un Character c que es innecesario -LISTO
-    - El invariante de representación tiene una contradicción: cuando el diccionario está vacío
+    - El invariante de representación tiene una contradicción: cuando el diccionario está vacío 
     ,hay un único nodo que es la raiz y no tiene ni significado ni hijos.
-    En el ultimo punto de su invrep dicen que no puede existir un nodo en esa condición
+    En el ultimo punto de su invrep dicen que no puede existir un nodo en esa condición -LISTO
     - DicTrie_Iterador y Pila deberían tener un invrep
-    - Linea 160, cada iteracion cuesta O(|prefijo|). Como tiene O(1) iteraciones, la complejidad total de la función les queda igual.*/
+    - Linea 160, cada iteracion cuesta O(|prefijo|). Como tiene O(1) iteraciones, la complejidad total de la función les queda igual. -LISTO
+    */
 
 
