@@ -18,7 +18,7 @@ public class DicTrie<T extends String, H> {
         int cantidadDeHijos;
         H significado;
 
-        Nodo(H v, Character c) {
+        Nodo(H v) {
             significado = v;                      // O(1)
             cantidadDeHijos = 0;                  // O(1)
             _siguientes = new ArrayList<>(256);   // O(256)
@@ -202,3 +202,15 @@ public class DicTrie<T extends String, H> {
         }
     }
 }
+/*
+
+DicTrie:
+@TODO
+    - El constructor de Nodo tiene un Character c que es innecesario -LISTO
+    - El invariante de representación tiene una contradicción: cuando el diccionario está vacío
+    ,hay un único nodo que es la raiz y no tiene ni significado ni hijos.
+    En el ultimo punto de su invrep dicen que no puede existir un nodo en esa condición
+    - DicTrie_Iterador y Pila deberían tener un invrep
+    - Linea 160, cada iteracion cuesta O(|prefijo|). Como tiene O(1) iteraciones, la complejidad total de la función les queda igual.*/
+
+

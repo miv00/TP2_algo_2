@@ -2,9 +2,11 @@ package aed;
 
 import java.util.ArrayList;
 
+
 public class SistemaSIU {
     // Invariante de Representacion
     // _diccionarioCarreras y _diccionarioestudiantes cumplen con el invariante de representación de la clase DicTrie.
+    // Tanto las claves de _diccionarioCarreras y dicCarreas deben ser strings comprendidos por caracteres ASCII
     // Las claves de _diccionarioCarreras cumplen con el invariante de representación de la clase DicTrie.
     // Las claves de las claves de _diccionarioCarreras cumple con el invariante de representación de la clase Materia.
     // Las claves del DicTrie _diccionarioestudiantes deben ser numeros enteros mayores o iguales a 0.
@@ -29,8 +31,8 @@ public class SistemaSIU {
 
             ParCarreraMateria[] par = infoMaterias[i].getParesCarreraMateria(); // O(1)
             ParPunteroAlias[] parPunteroArray = new ParPunteroAlias[par.length]; //O(sum_{n \in N_c} 1 )
-            Materia materia = new Materia(); // O(1)
-            materia.setParPunteroArray(parPunteroArray); // O(1)
+            Materia materia = new Materia(parPunteroArray); // O(1)
+            // materia.setParPunteroArray(parPunteroArray); // O(1)
             // O(sum_{N \in N_c} .... )
             for (int j = 0; j < par.length; j++) {
                 String carrera = par[j].getCarrera(); // O(1)
@@ -179,10 +181,11 @@ public class SistemaSIU {
 
         // O(1)
         ParPunteroAlias[] listaMateriasBorrar = mat.getParPunteroArray();
+        ArrayList<String> estudiantes = mat.lista_estudiantes();
         // O(E_m)
-        for (int i = 0; i < mat.lista_estudiantes().size(); i++) {
+        for (int i = 0; i < estudiantes.size(); i++) {
             // O(1)
-            String estudiante = mat.lista_estudiantes().get(i);
+            String estudiante =estudiantes.get(i);
             // O(1)
             int cant = _diccionarioestudiantes.obtener(estudiante);
             // O(1)
@@ -204,3 +207,10 @@ public class SistemaSIU {
     }
 
 }
+
+/*
+SistemaSIU:
+    @TODO
+        - Linea 33, tiene complejidad O(|Nc|)
+        - Linea 54: falta justificar, no explican su razonamiento. Hacen afirmaciones sin explicación
+        - Linea 185 y 187: lista_estudiantes() no es O(1)! Deberian llamarlo una sola vez antes del for --LISTO*/

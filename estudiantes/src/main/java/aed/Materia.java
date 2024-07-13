@@ -2,6 +2,7 @@ package aed;
 
 import java.util.ArrayList;
 
+
 public class Materia {
     // Invariante de Representación
     // _docentes debe ser un arreglo de 4 enteros y cada posicion debe ser un valor mayor o igual a 0.
@@ -21,9 +22,10 @@ public class Materia {
         this.parPunteroArray = parPunteroArray; // O(1)
     }
 
-    public Materia() {
+    public Materia(ParPunteroAlias[] parPunteroArray) {
         this._estudiantes = new DicTrie(); // O(1)
         this._docentes = new int[] { 0, 0, 0, 0 }; // O(1)
+        this.parPunteroArray = parPunteroArray;
     }
 
 
@@ -68,3 +70,10 @@ public class Materia {
         return excedeProfesor || excedeJTP || excedeAY1 || excedeAY2;
     }
 }
+/*
+Materia:
+     @TODO
+        - En vez de tener un setParPunteroArray, que lo usan justo despues de construir, deberían pasar ese dato directo al constructor. -LISTO
+        - Una manera mas limpia de hacer lo que intentaron hacer con eso es tener un método para agregar carrera,
+        que tomo como parámetro el dicTrie de la carrera y el string del nombre de la materia en esa carrera.
+*/
