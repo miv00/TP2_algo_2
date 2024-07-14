@@ -29,7 +29,7 @@ public class Materia {
     }
 
     public ArrayList<String> lista_estudiantes() {
-        return new ArrayList<>(_estudiantes.imprimir()); // O(E_m)
+        return new ArrayList<>(_estudiantes.imprimir()); // O(sum_{c \in C} |c| )
     }
 
     public void agregarEstudiante(String estudiante) {
