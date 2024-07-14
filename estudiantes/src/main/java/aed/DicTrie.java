@@ -130,7 +130,7 @@ public class DicTrie<T extends String, H> {
     }
 
     // Invariante de Representación de la clase DicTrie_Iterador:
-    // Las claves son claves del DicTrie
+    // Las claves son las claves del DicTrie
     private class DicTrie_Iterador {
         private ArrayList<String> claves;
 
@@ -212,7 +212,7 @@ DicTrie:
     - El invariante de representación tiene una contradicción: cuando el diccionario está vacío 
     ,hay un único nodo que es la raiz y no tiene ni significado ni hijos.
     En el ultimo punto de su invrep dicen que no puede existir un nodo en esa condición -LISTO
-    - DicTrie_Iterador y Pila deberían tener un invrep
+    - DicTrie_Iterador y Pila deberían tener un invrep --LISTO
     - Linea 160, cada iteracion cuesta O(|prefijo|). Como tiene O(1) iteraciones, la complejidad total de la función les queda igual. -LISTO
     */
 
