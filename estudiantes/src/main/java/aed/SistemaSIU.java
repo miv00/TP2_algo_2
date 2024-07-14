@@ -10,7 +10,7 @@ public class SistemaSIU {
     // Las claves de _diccionarioCarreras cumplen con el invariante de representación de la clase DicTrie.
     // Las claves de las claves de _diccionarioCarreras cumple con el invariante de representación de la clase Materia.
     // Las claves del DicTrie _diccionarioestudiantes deben ser numeros enteros mayores o iguales a 0.
-    
+
     private DicTrie<String, DicTrie<String, Materia>> _diccionarioCarreras;
 
     private DicTrie<String, Integer> _diccionarioestudiantes;
@@ -54,11 +54,11 @@ public class SistemaSIU {
         // Complejidad de la sección anterior:
         // En el primer for (linea 30) entramos |C| veces (para cada carrera c \in C) y la cpmplejidad en una iteracion es la complejidad de la linea 33 (O(sum_{n \in N_c} 1 ) = O(|N_c|)) más la complejidad del for de la linea 37.
         // En el for de la linea 37 entramos |N_c| veces y en cada iteracion la complejidad es O(|c| + |n|) donde c es una carrera (c \in C) y n es un nombre de una materia de la carrera (n \in N_c).
-        // Siguiendo los comentarios anteriores, la complejidad total es: O(sum_{c \in C} sum_{n \in N_c} (|c| + |n| + 1 ) ) 
+        // Siguiendo los comentarios anteriores, la complejidad total es: O(sum_{c \in C} sum_{n \in N_c} (|c| + |n| + 1 ) )
         // Como O(|c| + |n| + 1) = O(|c| + |n|) y usando operaciones elementales, la complejidad total se puede reescribir como O(sum_{c \in C} sum_{n \in N_c} (|c| + |n| ) ) = O(sum_{c \in C} sum_{n in N_c} |c| + sum_{c \in C} sum_{n in N_c} |n|) = O(sum_{c \in C} |c|*|N_c| + sum_{c \in C} sum_{n in N_c} |n| )
         // N_c es el conjunto de nombres de las materias de la carrera c y claramente tiene el mismo cardinal que M_c
         // y por otro lado sum_{c \in C} sum_{n \in N_c} |n| = sum_{m \in M} sum_{n \in N_m} |n| (estamos contando de 2 formas la cantidad de nombres de materias).
-        // Usando todo lo anterior la complejidad se puede escribir como O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n|)
+        // Usando lo anterior la complejidad se puede escribir como O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n|)
 
         // Complejidad: O(E)
         for (int i = 0; i < libretasUniversitarias.length; i++) {
@@ -176,7 +176,7 @@ public class SistemaSIU {
     }
 
 
-    // Complejidad: O(|c| + |m| + sum_{n \in N_m} |n| + |c_n|)
+    // Complejidad:  O( |c| + |m| + Sum_{n \in N_m} |n| + E_m)
     public void cerrarMateria(String materia, String carrera) {
         // O(|c|)
         DicTrie<String, Materia> dicMaterias = _diccionarioCarreras.obtener(carrera);
@@ -185,11 +185,12 @@ public class SistemaSIU {
 
         // O(1)
         ParPunteroAlias[] listaMateriasBorrar = mat.getParPunteroArray();
+        // O(E_m)
         ArrayList<String> estudiantes = mat.lista_estudiantes();
         // O(E_m)
         for (int i = 0; i < estudiantes.size(); i++) {
             // O(1)
-            String estudiante =estudiantes.get(i);
+            String estudiante = estudiantes.get(i);
             // O(1)
             int cant = _diccionarioestudiantes.obtener(estudiante);
             // O(1)
@@ -211,7 +212,6 @@ public class SistemaSIU {
     }
 
 }
-
 /*
 SistemaSIU:
     @TODO
