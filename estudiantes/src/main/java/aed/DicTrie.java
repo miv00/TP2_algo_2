@@ -191,9 +191,6 @@ public class DicTrie<T extends String, H> {
         }
 
         public E pop() {
-            if (isEmpty()) {
-                throw new RuntimeException("Pila vacía");
-            }
             return elementos.remove(elementos.size() - 1);  // O(1)
         }
 
