@@ -30,7 +30,7 @@ public class SistemaSIU {
         for (int i = 0; i < infoMaterias.length; i++) {
 
             ParCarreraMateria[] par = infoMaterias[i].getParesCarreraMateria(); // O(1)
-            ParPunteroAlias[] parPunteroArray = new ParPunteroAlias[par.length]; //O(sum_{n \in N_c} 1 )
+            ParPunteroAlias[] parPunteroArray = new ParPunteroAlias[par.length]; //O(sum_{n \in N_c} 1 ) = O(|N_c|)
             Materia materia = new Materia(parPunteroArray); // O(1)
             // materia.setParPunteroArray(parPunteroArray); // O(1)
             // O(sum_{N \in N_c} .... )
@@ -52,9 +52,13 @@ public class SistemaSIU {
         }
 
         // Complejidad de la sección anterior:
-        // Total: O(sum_{c \in C} sum_{n \in N_c} (|c| + |n| + 1 ) ) = O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n|)
+        // En el primer for (linea 30) entramos |C| veces (para cada carrera c \in C) y la cpmplejidad en una iteracion es la complejidad de la linea 33 (O(sum_{n \in N_c} 1 ) = O(|N_c|)) más la complejidad del for de la linea 37.
+        // En el for de la linea 37 entramos |N_c| veces y en cada iteracion la complejidad es O(|c| + |n|) donde c es una carrera (c \in C) y n es un nombre de una materia de la carrera (n \in N_c).
+        // Siguiendo los comentarios anteriores, la complejidad total es: O(sum_{c \in C} sum_{n \in N_c} (|c| + |n| + 1 ) ) 
+        // Como O(|c| + |n| + 1) = O(|c| + |n|) y usando operaciones elementales, la complejidad total se puede reescribir como O(sum_{c \in C} sum_{n \in N_c} (|c| + |n| ) ) = O(sum_{c \in C} sum_{n in N_c} |c| + sum_{c \in C} sum_{n in N_c} |n|) = O(sum_{c \in C} |c|*|N_c| + sum_{c \in C} sum_{n in N_c} |n| )
         // N_c es el conjunto de nombres de las materias de la carrera c y claramente tiene el mismo cardinal que M_c
-        // y por otro lado sum_{c \in C} sum_{n \in N_c} |n| = sum_{m \in M} sum_{n \in N_m} |n|
+        // y por otro lado sum_{c \in C} sum_{n \in N_c} |n| = sum_{m \in M} sum_{n \in N_m} |n| (estamos contando de 2 formas la cantidad de nombres de materias).
+        // Usando todo lo anterior la complejidad se puede escribir como O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n|)
 
         // Complejidad: O(E)
         for (int i = 0; i < libretasUniversitarias.length; i++) {
@@ -211,6 +215,6 @@ public class SistemaSIU {
 /*
 SistemaSIU:
     @TODO
-        - Linea 33, tiene complejidad O(|Nc|)
+        - Linea 33, tiene complejidad O(|Nc|) --LISTO
         - Linea 54: falta justificar, no explican su razonamiento. Hacen afirmaciones sin explicación
         - Linea 185 y 187: lista_estudiantes() no es O(1)! Deberian llamarlo una sola vez antes del for --LISTO*/
