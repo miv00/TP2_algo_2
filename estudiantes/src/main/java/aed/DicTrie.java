@@ -6,7 +6,7 @@ public class DicTrie<T extends String, H> {
     private Nodo _raiz;
     int _tamaño;
 
-    // Invariante de Representación
+    // Invariante de Representación de la clase DicTrie:
     // El trie siempre tiene que tener un nodo presente (nodo raiz), incluso si el trie esta vacio.
     // Las claves deben ser strings comprendidos por caracteres ASCII.
     // Cada nodo puede tener hasta 256 hijos (uno por cada posible caracter ASCII).
@@ -129,6 +129,8 @@ public class DicTrie<T extends String, H> {
         return iterador.armarClaves();  // O(sum_{c \in C} |c|)
     }
 
+    // Invariante de Representación de la clase DicTrie_Iterador:
+    // Las claves son claves del DicTrie
     private class DicTrie_Iterador {
         private ArrayList<String> claves;
 
@@ -179,6 +181,9 @@ public class DicTrie<T extends String, H> {
         }
     }
 
+    // Invariante de Representación de la clase Pila:
+    // Los elementos estan ordenados en el orden en el que fueron agregados (1ro el agregado mas reciente)
+    
     private class Pila<E> {
         private ArrayList<E> elementos;
 
