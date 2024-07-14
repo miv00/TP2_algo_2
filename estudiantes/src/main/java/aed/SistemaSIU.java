@@ -216,5 +216,5 @@ public class SistemaSIU {
 SistemaSIU:
     @TODO
         - Linea 33, tiene complejidad O(|Nc|) --LISTO
-        - Linea 54: falta justificar, no explican su razonamiento. Hacen afirmaciones sin explicación
+        - Linea 54: falta justificar, no explican su razonamiento. Hacen afirmaciones sin explicación --LISTO
         - Linea 185 y 187: lista_estudiantes() no es O(1)! Deberian llamarlo una sola vez antes del for --LISTO*/
