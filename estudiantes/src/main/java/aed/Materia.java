@@ -18,17 +18,11 @@ public class Materia {
         return parPunteroArray; // O(1)
     }
 
-    /*
-    public void setParPunteroArray(ParPunteroAlias[] parPunteroArray) {
-        this.parPunteroArray = parPunteroArray; // O(1)
-    }*/
-
     public Materia(ParPunteroAlias[] parPunteroArray) {
         this._estudiantes = new DicTrie(); // O(1)
         this._docentes = new int[] { 0, 0, 0, 0 }; // O(1)
         this.parPunteroArray = parPunteroArray;
     }
-
 
     public int get_estudiantes() {
         return _estudiantes._tamaño; // O(1)
