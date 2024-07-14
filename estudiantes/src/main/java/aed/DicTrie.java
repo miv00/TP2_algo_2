@@ -41,7 +41,7 @@ public class DicTrie<T extends String, H> {
     }
 
     public DicTrie() {
-        _raiz = new Nodo(null, null);   // O(1)
+        _raiz = new Nodo(null);   // O(1)
         _tamaño = 0;                   // O(1)
     }
 
@@ -60,7 +60,7 @@ public class DicTrie<T extends String, H> {
                 if (_actual._siguientes.get(charAscii) != null) {
                     _actual = _actual._siguientes.get(charAscii); // O(1)
                 } else {
-                    Nodo nuevo = new Nodo(null, (char) charAscii);  // O(256)
+                    Nodo nuevo = new Nodo(null);  // O(256)
                     _actual._siguientes.set(charAscii, nuevo);      // O(1)
                     _actual.cantidadDeHijos++;                      // O(1)
                     _actual = _actual._siguientes.get(charAscii);   // O(1)
@@ -162,7 +162,7 @@ public class DicTrie<T extends String, H> {
                 for (int i = 255; i >= 0; i--) {      // O(|prefijo|) Porque haces O(1) iteraciones, todas con complejidad O(|prefijo|).
                     Nodo siguiente = actual._siguientes.get(i);  // O(1)
                     if (siguiente != null) {
-                        StringBuffer nuevoPrefijo = new StringBuffer(prefijo);  // O(|prefijo|) 
+                        StringBuffer nuevoPrefijo = new StringBuffer(prefijo);  // O(|prefijo|)
                         nuevoPrefijo.append((char) i);                        // O(1)
                         stack.push(new NodoConPrefijo(siguiente, nuevoPrefijo)); // O(1)
                     }
@@ -183,7 +183,6 @@ public class DicTrie<T extends String, H> {
 
     // Invariante de Representación de la clase Pila:
     // Los elementos estan ordenados en el orden en el que fueron agregados (1ro el agregado mas reciente)
-    
     private class Pila<E> {
         private ArrayList<E> elementos;
 
