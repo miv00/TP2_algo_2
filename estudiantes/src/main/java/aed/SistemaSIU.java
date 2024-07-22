@@ -26,14 +26,14 @@ public class SistemaSIU {
     public SistemaSIU(InfoMateria[] infoMaterias, String[] libretasUniversitarias) {
         _diccionarioCarreras = new DicTrie<String, DicTrie<String, Materia>>(); // O(1)
         _diccionarioestudiantes = new DicTrie<String, Integer>(); // O(1)
-        // O(sum_{c \in C} .... )
+        // O(sum_{m \in M} .... )
         for (int i = 0; i < infoMaterias.length; i++) {
 
             ParCarreraMateria[] par = infoMaterias[i].getParesCarreraMateria(); // O(1)
-            ParPunteroAlias[] parPunteroArray = new ParPunteroAlias[par.length]; //O(sum_{n \in N_c} 1 ) = O(|N_c|)
+            ParPunteroAlias[] parPunteroArray = new ParPunteroAlias[par.length]; //O(sum_{c \in C_m} 1 ) = O(|C_m|) llamo C_m al conjunto de carreras que tienen la materia m, además |C_m| = |N_m| 
             Materia materia = new Materia(parPunteroArray); // O(1)
             // materia.setParPunteroArray(parPunteroArray); // O(1)
-            // O(sum_{N \in N_c} .... )
+            // O(sum_{c \in C_m} .... )
             for (int j = 0; j < par.length; j++) {
                 String carrera = par[j].getCarrera(); // O(1)
                 String nombreMateria = par[j].getNombreMateria(); // O(1)
@@ -52,12 +52,11 @@ public class SistemaSIU {
         }
 
         // Complejidad de la sección anterior:
-        // En el primer for (linea 30) entramos |C| veces (para cada carrera c \in C) y la cpmplejidad en una iteracion es la complejidad de la linea 33 (O(sum_{n \in N_c} 1 ) = O(|N_c|)) más la complejidad del for de la linea 37.
-        // En el for de la linea 37 entramos |N_c| veces y en cada iteracion la complejidad es O(|c| + |n|) donde c es una carrera (c \in C) y n es un nombre de una materia de la carrera (n \in N_c).
-        // Siguiendo los comentarios anteriores, la complejidad total es: O(sum_{c \in C} sum_{n \in N_c} (|c| + |n| + 1 ) )
-        // Como O(|c| + |n| + 1) = O(|c| + |n|) y usando operaciones elementales, la complejidad total se puede reescribir como O(sum_{c \in C} sum_{n \in N_c} (|c| + |n| ) ) = O(sum_{c \in C} sum_{n in N_c} |c| + sum_{c \in C} sum_{n in N_c} |n|) = O(sum_{c \in C} |c|*|N_c| + sum_{c \in C} sum_{n in N_c} |n| )
-        // N_c es el conjunto de nombres de las materias de la carrera c y claramente tiene el mismo cardinal que M_c
-        // y por otro lado sum_{c \in C} sum_{n \in N_c} |n| = sum_{m \in M} sum_{n \in N_m} |n| (estamos contando de 2 formas la cantidad de nombres de materias).
+        // En el primer for (linea 30) entramos |M| veces (para cada carrera m \in M) y la cpmplejidad en una iteracion es la complejidad de la linea 33 (O(sum_{c \in C_m} 1 ) = O(|C_m|)) más la complejidad del for de la linea 37.
+        // En el for de la linea 37 entramos |C_m| = |N_m| veces y en cada iteracion la complejidad es O(|c| + |n|) donde c es una carrera (c \in C_m) y n es un nombre de una materia (n \in N_m).
+        // Siguiendo los comentarios anteriores, la complejidad total es: O(sum_{m \in M} [ sum_{c \in C_m} (|c| + 1 )  + sum_{n \in N_m } |n|])
+        // Como O(|c| + 1) = O(|c|) y usando operaciones elementales, la complejidad total se puede reescribir como O(sum_{m \in M} sum_{c \in C_m} |c|  + sum_{m \in M} sum_{n \in N_m } |n|)
+        // Ahora noto que sum_{m \in M} sum_{c \in C_m} ... = sum_{c \in C} sum_{m \in M_c} ..., cambio el orden de sumación. Usando esto sum_{m \in M} sum_{c \in C_m} |c| = sum_{c \in C} sum_{m \in M_c} |c| = sum_{c \in C} |c| * |M_c| 
         // Usando lo anterior la complejidad se puede escribir como O(sum_{c \in C} |c| * |M_c| + sum_{m \in M} sum_{n \in N_m} |n|)
 
         // Complejidad: O(E)
